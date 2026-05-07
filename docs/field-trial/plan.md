@@ -26,6 +26,7 @@ The first trial should use fixed sandbox data. Public websites can be used as re
 ```text
 GET /exhibitions/2026/artists
 GET /exhibitions/{year}/artists
+GET /exhibitions/{year}/works
 ```
 
 Suggested first response fields:
@@ -35,6 +36,16 @@ Suggested first response fields:
 - `displayName.jp`
 - `countryOrRegion`
 - `workCount`
+
+Suggested first work response fields:
+
+- `workId`
+- `artistId`
+- `artistDisplayName.en`
+- `artistDisplayName.jp`
+- `title.en`
+- `title.jp`
+- `workNumber`
 
 Keep the data small, static, and non-sensitive until the endpoint shape is proven.
 

@@ -157,6 +157,59 @@ paths:
           $ref: '#/components/responses/PayloadTooLarge'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /exhibitions/{year}/works:
+    get:
+      tags:
+        - Exhibitions
+      summary: Exhibition work list by year
+      description: Returns the fixed sandbox work list for a SAKURA Exhibition-style field-trial year.
+      operationId: getExhibitionWorksByYear
+      parameters:
+        - name: year
+          in: path
+          required: true
+          description: Exhibition year to read from the sandbox fixture.
+          schema:
+            type: integer
+            format: int32
+            minimum: 2009
+            maximum: 2026
+          example: 2026
+      responses:
+        '200':
+          description: Exhibition work list response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExhibitionWorksResponse'
+              examples:
+                ok:
+                  summary: 2026 work list
+                  value:
+                    exhibitionYear: 2026
+                    works:
+                      - workId: 20260101
+                        artistId: 1
+                        artistDisplayName:
+                          en: Yoshimi Ohtani
+                          jp: オオタニヨシミ
+                        title:
+                          en: Spring Light
+                          jp: 春の光
+                        workNumber: 1
+                      - workId: 20260201
+                        artistId: 2
+                        artistDisplayName:
+                          en: Hideyuki Mori
+                          jp: 彩
+                        title:
+                          en: Color Field
+                          jp: 彩の場
+                        workNumber: 1
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /exhibitions/2026/artists:
     get:
       tags:
@@ -491,4 +544,58 @@ components:
         jp:
           type: string
           example: オオタニヨシミ
+      additionalProperties: false
+    ExhibitionWorksResponse:
+      type: object
+      required:
+        - exhibitionYear
+        - works
+      properties:
+        exhibitionYear:
+          type: integer
+          format: int32
+          example: 2026
+        works:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExhibitionWork'
+    ExhibitionWork:
+      type: object
+      required:
+        - workId
+        - artistId
+        - artistDisplayName
+        - title
+        - workNumber
+      properties:
+        workId:
+          type: integer
+          format: int32
+          example: 20260101
+        artistId:
+          type: integer
+          format: int32
+          example: 1
+        artistDisplayName:
+          $ref: '#/components/schemas/ArtistDisplayName'
+        title:
+          $ref: '#/components/schemas/WorkTitle'
+        workNumber:
+          type: integer
+          format: int32
+          minimum: 1
+          example: 1
+      additionalProperties: false
+    WorkTitle:
+      type: object
+      required:
+        - en
+        - jp
+      properties:
+        en:
+          type: string
+          example: Spring Light
+        jp:
+          type: string
+          example: 春の光
       additionalProperties: false

@@ -157,6 +157,46 @@ final class HttpRuntimeTest extends TestCase
         ], $payload['artists']);
     }
 
+    public function testExhibitionWorksEndpointReturnsWorksForYear(): void
+    {
+        $factory = new Psr17Factory();
+        $application = (new RuntimeApplicationFactory($factory, $factory))->create();
+
+        $response = $application->handle($factory->createServerRequest('GET', 'https://example.test/exhibitions/2026/works'));
+        $payload = $this->decodeJson($response);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(2026, $payload['exhibitionYear']);
+        self::assertSame([
+            [
+                'workId' => 20260101,
+                'artistId' => 1,
+                'artistDisplayName' => [
+                    'en' => 'Yoshimi Ohtani',
+                    'jp' => 'オオタニヨシミ',
+                ],
+                'title' => [
+                    'en' => 'Spring Light',
+                    'jp' => '春の光',
+                ],
+                'workNumber' => 1,
+            ],
+            [
+                'workId' => 20260201,
+                'artistId' => 2,
+                'artistDisplayName' => [
+                    'en' => 'Hideyuki Mori',
+                    'jp' => '彩',
+                ],
+                'title' => [
+                    'en' => 'Color Field',
+                    'jp' => '彩の場',
+                ],
+                'workNumber' => 1,
+            ],
+        ], $payload['works']);
+    }
+
     public function testUnsupportedMethodReturnsProblemDetailsWithAllowHeader(): void
     {
         $factory = new Psr17Factory();
