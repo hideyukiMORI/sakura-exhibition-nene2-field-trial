@@ -11,8 +11,55 @@ import { fetchHealth, type HealthResponse } from './api/health';
 
 const exhibitionYears = [2026, 2025] as const;
 
+type Locale = 'en' | 'jp';
+
+const uiCopy: Record<
+  Locale,
+  {
+    readonly archiveNote: string;
+    readonly waitingForApi: string;
+    readonly switchYear: string;
+    readonly featuredFallback: string;
+    readonly artistsHeading: (year: number) => string;
+    readonly worksHeading: (year: number) => string;
+    readonly regionLabel: string;
+    readonly workCountLabel: string;
+    readonly artistLabel: string;
+    readonly footerNote: string;
+  }
+> = {
+  en: {
+    archiveNote:
+      'A cinematic portal concept powered by NENE2 APIs. The demo keeps the data public, structured, and visible through OpenAPI and local MCP boundaries.',
+    waitingForApi: 'Waiting for API response',
+    switchYear: 'Switch year',
+    featuredFallback: 'No featured work for this year.',
+    artistsHeading: (year) => `${year} participating artists`,
+    worksHeading: (year) => `${year} public work list`,
+    regionLabel: 'Region',
+    workCountLabel: 'Works',
+    artistLabel: 'Artist',
+    footerNote: 'Private field-trial interface. Sample public data only.',
+  },
+  jp: {
+    archiveNote:
+      'NENE2 API で公開展示データを扱うための試作ポータルです。OpenAPI と local MCP の境界を保ったまま、構造化されたサンプルデータを表示します。',
+    waitingForApi: 'API 応答を待っています',
+    switchYear: '年度切替',
+    featuredFallback: 'この年度の注目作品はありません。',
+    artistsHeading: (year) => `${year} 参加作家`,
+    worksHeading: (year) => `${year} 作品リスト`,
+    regionLabel: '地域',
+    workCountLabel: '作品数',
+    artistLabel: '作家',
+    footerNote:
+      '非公開 field trial 用インターフェースです。表示データはサンプルです。',
+  },
+};
+
 export function App() {
   const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [locale, setLocale] = useState<Locale>('en');
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [healthError, setHealthError] = useState<string | null>(null);
   const [artists, setArtists] = useState<readonly ExhibitionArtist[]>([]);
@@ -20,6 +67,7 @@ export function App() {
   const [exhibitionError, setExhibitionError] = useState<string | null>(null);
   const [isLoadingExhibition, setIsLoadingExhibition] = useState(true);
   const featuredWork = works[0] ?? null;
+  const copy = uiCopy[locale];
 
   useEffect(() => {
     let isActive = true;
@@ -85,11 +133,7 @@ export function App() {
         <div className="hero-copy">
           <p className="eyebrow">SAKURA Exhibition Field Trial</p>
           <h1>Archive of light, form, and public works.</h1>
-          <p className="summary">
-            A cinematic portal concept powered by NENE2 APIs. The demo keeps the
-            data public, structured, and visible through OpenAPI and local MCP
-            boundaries.
-          </p>
+          <p className="summary">{copy.archiveNote}</p>
         </div>
 
         <div className="hero-poster" aria-label="Featured exhibition poster">
@@ -108,7 +152,7 @@ export function App() {
             </p>
           ) : (
             <p className="status-message">
-              {healthError ?? 'Waiting for API response'}
+              {healthError ?? copy.waitingForApi}
             </p>
           )}
         </div>
@@ -117,7 +161,7 @@ export function App() {
           <p className="eyebrow">Season</p>
           <h2 id="exhibition-year-title">{selectedYear}</h2>
           <label>
-            <span>Switch year</span>
+            <span>{copy.switchYear}</span>
             <select
               value={selectedYear}
               onChange={(event) => {
@@ -132,6 +176,20 @@ export function App() {
               ))}
             </select>
           </label>
+          <div className="language-toggle" aria-label="Display language">
+            {(['en', 'jp'] as const).map((language) => (
+              <button
+                key={language}
+                type="button"
+                aria-pressed={locale === language}
+                onClick={() => {
+                  setLocale(language);
+                }}
+              >
+                {language.toUpperCase()}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="metric-card">
@@ -174,15 +232,14 @@ export function App() {
               </dl>
             </>
           ) : (
-            <p>No featured work for this year.</p>
+            <p>{copy.featuredFallback}</p>
           )}
         </article>
 
         <article className="quote-card">
           <p className="eyebrow">Direction</p>
           <blockquote>
-            A restrained public archive with film-poster drama and luxury
-            editorial rhythm.
+            A curated public archive with cinematic calm and luxury restraint.
           </blockquote>
         </article>
       </section>
@@ -192,7 +249,7 @@ export function App() {
           <div className="panel-header">
             <div>
               <p className="eyebrow">Artists</p>
-              <h2 id="artists-title">{selectedYear} participating artists</h2>
+              <h2 id="artists-title">{copy.artistsHeading(selectedYear)}</h2>
             </div>
             <span className="count-pill">{artists.length}</span>
           </div>
@@ -206,11 +263,11 @@ export function App() {
                 </div>
                 <dl>
                   <div>
-                    <dt>Region</dt>
+                    <dt>{copy.regionLabel}</dt>
                     <dd>{artist.countryOrRegion}</dd>
                   </div>
                   <div>
-                    <dt>Works</dt>
+                    <dt>{copy.workCountLabel}</dt>
                     <dd>{artist.workCount}</dd>
                   </div>
                 </dl>
@@ -223,7 +280,7 @@ export function App() {
           <div className="panel-header">
             <div>
               <p className="eyebrow">Works</p>
-              <h2 id="works-title">{selectedYear} public work list</h2>
+              <h2 id="works-title">{copy.worksHeading(selectedYear)}</h2>
             </div>
             <span className="count-pill">{works.length}</span>
           </div>
@@ -237,7 +294,7 @@ export function App() {
                 </div>
                 <dl>
                   <div>
-                    <dt>Artist</dt>
+                    <dt>{copy.artistLabel}</dt>
                     <dd>{work.artistDisplayName.en}</dd>
                   </div>
                   <div>
@@ -250,6 +307,18 @@ export function App() {
           </div>
         </section>
       </section>
+
+      <footer className="site-footer">
+        <div>
+          <p className="eyebrow">Field Trial Build</p>
+          <p>{copy.footerNote}</p>
+        </div>
+        <nav aria-label="Technical boundaries">
+          <a href="/api/health">API</a>
+          <a href="/docs/">OpenAPI</a>
+          <span>MCP Ready</span>
+        </nav>
+      </footer>
     </main>
   );
 }
