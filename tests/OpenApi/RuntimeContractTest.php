@@ -83,7 +83,7 @@ final class RuntimeContractTest extends TestCase
 
                 yield sprintf('%s %s', strtoupper($method), $path) => [
                     strtoupper($method),
-                    $path,
+                    self::examplePath($path, $operation),
                     200,
                     $example,
                     self::schemaForReference($openApi, $schemaRef),
@@ -103,6 +103,33 @@ final class RuntimeContractTest extends TestCase
         self::assertIsArray($openApi);
 
         return $openApi;
+    }
+
+    /**
+     * @param array<string, mixed> $operation
+     */
+    private static function examplePath(string $path, array $operation): string
+    {
+        $parameters = $operation['parameters'] ?? [];
+
+        if (!is_array($parameters)) {
+            return $path;
+        }
+
+        foreach ($parameters as $parameter) {
+            if (!is_array($parameter)) {
+                continue;
+            }
+
+            $name = $parameter['name'] ?? null;
+            $example = $parameter['example'] ?? null;
+
+            if (is_string($name) && (is_string($example) || is_int($example))) {
+                $path = str_replace(sprintf('{%s}', $name), (string) $example, $path);
+            }
+        }
+
+        return $path;
     }
 
     /**

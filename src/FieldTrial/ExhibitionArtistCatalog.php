@@ -34,6 +34,11 @@ final readonly class ExhibitionArtistCatalog
     private const EXHIBITION_YEARS = [
         [
             'artistId' => 1,
+            'exhibitionYear' => 2025,
+            'workCount' => 2,
+        ],
+        [
+            'artistId' => 1,
             'exhibitionYear' => 2026,
             'workCount' => 1,
         ],

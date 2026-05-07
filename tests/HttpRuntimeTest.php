@@ -134,6 +134,29 @@ final class HttpRuntimeTest extends TestCase
         ], $payload['artists']);
     }
 
+    public function testExhibitionArtistsEndpointSupportsYearPathParameter(): void
+    {
+        $factory = new Psr17Factory();
+        $application = (new RuntimeApplicationFactory($factory, $factory))->create();
+
+        $response = $application->handle($factory->createServerRequest('GET', 'https://example.test/exhibitions/2025/artists'));
+        $payload = $this->decodeJson($response);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(2025, $payload['exhibitionYear']);
+        self::assertSame([
+            [
+                'artistId' => 1,
+                'displayName' => [
+                    'en' => 'Yoshimi Ohtani',
+                    'jp' => 'オオタニヨシミ',
+                ],
+                'countryOrRegion' => 'Japan',
+                'workCount' => 2,
+            ],
+        ], $payload['artists']);
+    }
+
     public function testUnsupportedMethodReturnsProblemDetailsWithAllowHeader(): void
     {
         $factory = new Psr17Factory();
