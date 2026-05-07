@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: none
-- Current branch: `main`
+- Current GitHub Issue: `#34`
+- Current branch: `feat/34-mcp-exhibition-2026-works`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
@@ -23,10 +23,12 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 - [x] Add a first public work list endpoint for one exhibition year. `#20`
 - [x] Add a browser demo for artists and works. `#24`
 - [x] Restyle the browser demo as a cinematic luxury portal. `#28`
+- [x] Refine premium portal UI (accent, i18n toggle, footer). `#32`
+- [x] Add local MCP-facing read-only evidence for the work list endpoint. `#34`
 
 ## Next Candidates
 
-- [ ] Add local MCP-facing read-only evidence for the work list endpoint.
+- [ ] None queued (see `docs/field-trial/plan.md`).
 
 ## Operating Notes
 

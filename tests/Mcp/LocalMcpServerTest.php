@@ -44,6 +44,8 @@ final class LocalMcpServerTest extends TestCase
         self::assertInstanceOf(\stdClass::class, $response['result']['tools'][1]['inputSchema']['properties'] ?? null);
         self::assertSame('getExhibition2026Artists', $response['result']['tools'][2]['name'] ?? null);
         self::assertSame(true, $response['result']['tools'][2]['annotations']['readOnlyHint'] ?? null);
+        self::assertSame('getExhibition2026Works', $response['result']['tools'][3]['name'] ?? null);
+        self::assertSame(true, $response['result']['tools'][3]['annotations']['readOnlyHint'] ?? null);
     }
 
     public function testToolsCallInvokesLocalHttpApiAndReturnsRequestId(): void
@@ -96,6 +98,35 @@ final class LocalMcpServerTest extends TestCase
         self::assertSame('request-artists-123', $response['result']['structuredContent']['requestId'] ?? null);
         self::assertSame(2026, $response['result']['structuredContent']['body']['exhibitionYear'] ?? null);
         self::assertSame('Yoshimi Ohtani', $response['result']['structuredContent']['body']['artists'][0]['displayName']['en'] ?? null);
+    }
+
+    public function testToolsCallInvokesExhibitionWorksEndpoint(): void
+    {
+        $client = new RecordingLocalMcpHttpClient(new LocalMcpHttpResponse(
+            200,
+            ['x-request-id' => 'request-works-123'],
+            '{"exhibitionYear":2026,"works":[{"workId":20260101,"artistId":1,"artistDisplayName":{"en":"Yoshimi Ohtani","jp":"オオタニヨシミ"},"title":{"en":"Spring Light","jp":"春の光"},"workNumber":1}]}',
+        ));
+        $server = $this->server($client);
+
+        $response = $server->handle([
+            'jsonrpc' => '2.0',
+            'id' => 5,
+            'method' => 'tools/call',
+            'params' => [
+                'name' => 'getExhibition2026Works',
+                'arguments' => [],
+            ],
+        ]);
+
+        self::assertSame('/exhibitions/2026/works', $client->path);
+        self::assertSame(false, $response['result']['isError'] ?? null);
+        self::assertSame('request-works-123', $response['result']['structuredContent']['requestId'] ?? null);
+        self::assertSame(2026, $response['result']['structuredContent']['body']['exhibitionYear'] ?? null);
+        self::assertSame(
+            'Spring Light',
+            $response['result']['structuredContent']['body']['works'][0]['title']['en'] ?? null,
+        );
     }
 
     public function testNotificationsDoNotReturnResponses(): void
