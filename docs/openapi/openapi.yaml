@@ -210,6 +210,62 @@ paths:
           $ref: '#/components/responses/PayloadTooLarge'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /exhibitions/{year}/works/{workId}:
+    get:
+      tags:
+        - Exhibitions
+      summary: Exhibition work detail by year and id
+      description: >-
+        Returns a single sandbox work for the exhibition year when it exists.
+        Returns 404 when the work id is not registered for that year.
+      operationId: getExhibitionWorkByYearAndId
+      parameters:
+        - name: year
+          in: path
+          required: true
+          description: Exhibition year to read from the sandbox fixture.
+          schema:
+            type: integer
+            format: int32
+            minimum: 2009
+            maximum: 2026
+          example: 2026
+        - name: workId
+          in: path
+          required: true
+          description: Sandbox work identifier.
+          schema:
+            type: integer
+            format: int32
+          example: 20260101
+      responses:
+        '200':
+          description: Exhibition work detail response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExhibitionWorkDetailResponse'
+              examples:
+                ok:
+                  summary: 2026 work detail
+                  value:
+                    exhibitionYear: 2026
+                    work:
+                      workId: 20260101
+                      artistId: 1
+                      artistDisplayName:
+                        en: Yoshimi Ohtani
+                        jp: オオタニヨシミ
+                      title:
+                        en: Spring Light
+                        jp: 春の光
+                      workNumber: 1
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /exhibitions/2026/artists:
     get:
       tags:
@@ -601,6 +657,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ExhibitionWork'
+    ExhibitionWorkDetailResponse:
+      type: object
+      required:
+        - exhibitionYear
+        - work
+      properties:
+        exhibitionYear:
+          type: integer
+          format: int32
+          example: 2026
+        work:
+          $ref: '#/components/schemas/ExhibitionWork'
+      additionalProperties: false
     ExhibitionWork:
       type: object
       required:

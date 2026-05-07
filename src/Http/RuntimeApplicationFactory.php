@@ -94,6 +94,32 @@ final readonly class RuntimeApplicationFactory
 
                     return $jsonResponses->create($workCatalog->worksForYear($year));
                 },
+            )
+            ->get(
+                '/exhibitions/{year}/works/{workId}',
+                static function (ServerRequestInterface $request) use ($jsonResponses, $workCatalog, $problemDetails) {
+                    $parameters = $request->getAttribute(Router::PARAMETERS_ATTRIBUTE, []);
+
+                    if (!is_array($parameters)) {
+                        return $problemDetails->create($request, 'not-found', 'Not Found', 404);
+                    }
+
+                    $year = (int) ($parameters['year'] ?? 0);
+                    $workId = (int) ($parameters['workId'] ?? 0);
+                    $payload = $workCatalog->workForYearAndId($year, $workId);
+
+                    if ($payload === null) {
+                        return $problemDetails->create(
+                            $request,
+                            'not-found',
+                            'Not Found',
+                            404,
+                            'The requested work was not found for this exhibition year.',
+                        );
+                    }
+
+                    return $jsonResponses->create($payload);
+                },
             );
 
         return new MiddlewareDispatcher(
