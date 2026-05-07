@@ -4,14 +4,14 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 
 ## Status
 
-- Current milestone: first private SAKURA Exhibition-style field trial
+- Current milestone: SAKURA Exhibition–style NENE2 field trial (public demo sandbox)
 - Current GitHub Issue: none (see **Next Candidates**)
 - Current branch: `main`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
 
-- [x] Create private field-trial repository. `#1`
+- [x] Bootstrap field-trial repository (public demo sandbox). `#1`
 - [x] Import NENE2 `v0.1.1` as the starting foundation. `#1`
 - [x] Add field-trial README and safety boundaries. `#1`
 - [x] Add fixed fixture data for a public exhibition artist list. `#8`

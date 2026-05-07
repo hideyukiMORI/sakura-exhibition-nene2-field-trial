@@ -1,6 +1,6 @@
 # Agent / AI Guide
 
-This file is the entry point for AI agents and automation working on NENE2.
+This file is the entry point for AI agents and automation working in **this field-trial sandbox** (a small client-style project derived from NENE2). **Framework** design and upstream changes belong in [`hideyukiMORI/NENE2`](https://github.com/hideyukiMORI/NENE2).
 
 ## Read First
 

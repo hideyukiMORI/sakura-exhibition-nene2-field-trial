@@ -39,7 +39,8 @@ const uiCopy: Record<
     regionLabel: 'Region',
     workCountLabel: 'Works',
     artistLabel: 'Artist',
-    footerNote: 'Private field-trial interface. Sample public data only.',
+    footerNote:
+      'Open field-trial demo UI. Exhibition-style fiction only; see repository README.',
   },
   jp: {
     archiveNote:
@@ -53,7 +54,7 @@ const uiCopy: Record<
     workCountLabel: '作品数',
     artistLabel: '作家',
     footerNote:
-      '非公開 field trial 用インターフェースです。表示データはサンプルです。',
+      '公開されている field trial のデモ UI です（実イベント非関連・フィクションのデータ）。README を参照してください。',
   },
 };
 
