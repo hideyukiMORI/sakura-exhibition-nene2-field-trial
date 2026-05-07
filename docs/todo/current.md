@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: `#28`
-- Current branch: `feat/28-cinematic-luxury-portal-ui`
+- Current GitHub Issue: none
+- Current branch: `main`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
