@@ -37,6 +37,24 @@
         "properties": {}
       },
       "responseSchemaRef": "#/components/schemas/HealthResponse"
+    },
+    {
+      "name": "getExhibition2026Artists",
+      "title": "2026 Exhibition Artists",
+      "description": "Read the 2026 SAKURA Exhibition-style sandbox artist list through the documented public API.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getExhibition2026Artists",
+        "method": "GET",
+        "path": "/exhibitions/2026/artists"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/ExhibitionArtistsResponse"
     }
   ]
 }
