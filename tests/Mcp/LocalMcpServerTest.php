@@ -42,6 +42,8 @@ final class LocalMcpServerTest extends TestCase
         self::assertSame('getHealth', $response['result']['tools'][1]['name'] ?? null);
         self::assertSame(true, $response['result']['tools'][1]['annotations']['readOnlyHint'] ?? null);
         self::assertInstanceOf(\stdClass::class, $response['result']['tools'][1]['inputSchema']['properties'] ?? null);
+        self::assertSame('getExhibition2026Artists', $response['result']['tools'][2]['name'] ?? null);
+        self::assertSame(true, $response['result']['tools'][2]['annotations']['readOnlyHint'] ?? null);
     }
 
     public function testToolsCallInvokesLocalHttpApiAndReturnsRequestId(): void
@@ -68,6 +70,32 @@ final class LocalMcpServerTest extends TestCase
         self::assertSame(false, $response['result']['isError'] ?? null);
         self::assertSame('request-123', $response['result']['structuredContent']['requestId'] ?? null);
         self::assertSame('ok', $response['result']['structuredContent']['body']['status'] ?? null);
+    }
+
+    public function testToolsCallInvokesExhibitionArtistsEndpoint(): void
+    {
+        $client = new RecordingLocalMcpHttpClient(new LocalMcpHttpResponse(
+            200,
+            ['x-request-id' => 'request-artists-123'],
+            '{"exhibitionYear":2026,"artists":[{"artistId":1,"displayName":{"en":"Yoshimi Ohtani","jp":"オオタニヨシミ"},"countryOrRegion":"Japan","workCount":1}]}',
+        ));
+        $server = $this->server($client);
+
+        $response = $server->handle([
+            'jsonrpc' => '2.0',
+            'id' => 4,
+            'method' => 'tools/call',
+            'params' => [
+                'name' => 'getExhibition2026Artists',
+                'arguments' => [],
+            ],
+        ]);
+
+        self::assertSame('/exhibitions/2026/artists', $client->path);
+        self::assertSame(false, $response['result']['isError'] ?? null);
+        self::assertSame('request-artists-123', $response['result']['structuredContent']['requestId'] ?? null);
+        self::assertSame(2026, $response['result']['structuredContent']['body']['exhibitionYear'] ?? null);
+        self::assertSame('Yoshimi Ohtani', $response['result']['structuredContent']['body']['artists'][0]['displayName']['en'] ?? null);
     }
 
     public function testNotificationsDoNotReturnResponses(): void

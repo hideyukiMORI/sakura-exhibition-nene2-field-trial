@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: none
-- Current branch: `main`
+- Current GitHub Issue: `#12`
+- Current branch: `docs/12-mcp-field-trial-evidence`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
@@ -20,8 +20,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 
 ## Next Candidates
 
-- [ ] Add local MCP-facing read-only evidence for the endpoint.
-- [ ] Write the first field-trial report with command output, request id, and follow-up notes.
+- [x] Add local MCP-facing read-only evidence for the endpoint. `#12`
+- [x] Write the first field-trial report with command output, request id, and follow-up notes. `#12`
 
 ## Operating Notes
 

@@ -21,4 +21,18 @@ final class LocalMcpToolCatalogTest extends TestCase
         self::assertSame('/health', $tool['source']['path']);
         self::assertSame('getHealth', $tool['source']['operationId']);
     }
+
+    public function testLoadsExhibitionArtistsToolFromCommittedCatalog(): void
+    {
+        $catalog = new LocalMcpToolCatalog(dirname(__DIR__, 2) . '/docs/mcp/tools.json');
+
+        $tool = $catalog->find('getExhibition2026Artists');
+
+        self::assertNotNull($tool);
+        self::assertSame('read', $tool['safety']);
+        self::assertSame('GET', $tool['source']['method']);
+        self::assertSame('/exhibitions/2026/artists', $tool['source']['path']);
+        self::assertSame('getExhibition2026Artists', $tool['source']['operationId']);
+        self::assertSame('#/components/schemas/ExhibitionArtistsResponse', $tool['responseSchemaRef']);
+    }
 }
