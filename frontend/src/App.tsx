@@ -19,6 +19,7 @@ export function App() {
   const [works, setWorks] = useState<readonly ExhibitionWork[]>([]);
   const [exhibitionError, setExhibitionError] = useState<string | null>(null);
   const [isLoadingExhibition, setIsLoadingExhibition] = useState(true);
+  const featuredWork = works[0] ?? null;
 
   useEffect(() => {
     let isActive = true;
@@ -81,54 +82,71 @@ export function App() {
   return (
     <main className="app-shell">
       <section className="hero">
-        <p className="eyebrow">SAKURA Exhibition Field Trial</p>
-        <h1>Public exhibition data, served by NENE2.</h1>
-        <p className="summary">
-          A small browser demo for the private NENE2 field trial. It reads the
-          same JSON APIs that are documented in OpenAPI and exposed to local MCP
-          tools.
-        </p>
-      </section>
-
-      <section className="status-panel" aria-labelledby="backend-status-title">
-        <div>
-          <p className="eyebrow">Backend Integration</p>
-          <h2 id="backend-status-title">Health API status</h2>
+        <div className="hero-copy">
+          <p className="eyebrow">SAKURA Exhibition Field Trial</p>
+          <h1>Archive of light, form, and public works.</h1>
+          <p className="summary">
+            A cinematic portal concept powered by NENE2 APIs. The demo keeps the
+            data public, structured, and visible through OpenAPI and local MCP
+            boundaries.
+          </p>
         </div>
 
-        {health !== null ? (
-          <p className="status-message is-ok">
-            {health.service} responded with <strong>{health.status}</strong>.
-          </p>
-        ) : (
-          <p className="status-message">
-            {healthError ??
-              'Waiting for the NENE2 backend health endpoint to respond.'}
-          </p>
-        )}
+        <div className="hero-poster" aria-label="Featured exhibition poster">
+          <span className="poster-year">{selectedYear}</span>
+          <span className="poster-line" />
+          <p>Public Exhibition Index</p>
+        </div>
       </section>
 
-      <section className="toolbar" aria-labelledby="exhibition-year-title">
-        <div>
-          <p className="eyebrow">Exhibition Year</p>
-          <h2 id="exhibition-year-title">Browse sandbox entries</h2>
+      <section className="command-deck" aria-labelledby="exhibition-year-title">
+        <div className="status-card">
+          <p className="eyebrow">Backend</p>
+          {health !== null ? (
+            <p className="status-message is-ok">
+              {health.service} / <strong>{health.status}</strong>
+            </p>
+          ) : (
+            <p className="status-message">
+              {healthError ?? 'Waiting for API response'}
+            </p>
+          )}
         </div>
-        <label>
-          <span>Year</span>
-          <select
-            value={selectedYear}
-            onChange={(event) => {
-              setIsLoadingExhibition(true);
-              setSelectedYear(Number(event.target.value));
-            }}
-          >
-            {exhibitionYears.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </label>
+
+        <div className="year-card">
+          <p className="eyebrow">Season</p>
+          <h2 id="exhibition-year-title">{selectedYear}</h2>
+          <label>
+            <span>Switch year</span>
+            <select
+              value={selectedYear}
+              onChange={(event) => {
+                setIsLoadingExhibition(true);
+                setSelectedYear(Number(event.target.value));
+              }}
+            >
+              {exhibitionYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="metric-card">
+          <p className="eyebrow">Index</p>
+          <dl>
+            <div>
+              <dt>Artists</dt>
+              <dd>{artists.length}</dd>
+            </div>
+            <div>
+              <dt>Works</dt>
+              <dd>{works.length}</dd>
+            </div>
+          </dl>
+        </div>
       </section>
 
       {exhibitionError !== null ? (
@@ -136,6 +154,38 @@ export function App() {
           <p className="status-message is-error">{exhibitionError}</p>
         </section>
       ) : null}
+
+      <section className="feature-grid" aria-busy={isLoadingExhibition}>
+        <article className="feature-card">
+          <p className="eyebrow">Featured Work</p>
+          {featuredWork !== null ? (
+            <>
+              <h2>{featuredWork.title.en}</h2>
+              <p>{featuredWork.title.jp}</p>
+              <dl>
+                <div>
+                  <dt>Artist</dt>
+                  <dd>{featuredWork.artistDisplayName.en}</dd>
+                </div>
+                <div>
+                  <dt>Archive ID</dt>
+                  <dd>{featuredWork.workId}</dd>
+                </div>
+              </dl>
+            </>
+          ) : (
+            <p>No featured work for this year.</p>
+          )}
+        </article>
+
+        <article className="quote-card">
+          <p className="eyebrow">Direction</p>
+          <blockquote>
+            A restrained public archive with film-poster drama and luxury
+            editorial rhythm.
+          </blockquote>
+        </article>
+      </section>
 
       <section className="content-grid" aria-busy={isLoadingExhibition}>
         <section className="panel" aria-labelledby="artists-title">
