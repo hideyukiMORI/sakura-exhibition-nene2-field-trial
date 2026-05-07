@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: `#12`
-- Current branch: `docs/12-mcp-field-trial-evidence`
+- Current GitHub Issue: none
+- Current branch: `main`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
