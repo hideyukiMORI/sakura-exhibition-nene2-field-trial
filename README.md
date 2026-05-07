@@ -62,6 +62,7 @@ Useful local URLs:
 - Example endpoint from NENE2: `http://localhost:8080/examples/ping`
 - Field-trial artist list: `http://localhost:8080/exhibitions/2026/artists`
 - Field-trial artist list by year: `http://localhost:8080/exhibitions/2025/artists`
+- Field-trial work list by year: `http://localhost:8080/exhibitions/2026/works`
 - OpenAPI: `http://localhost:8080/openapi.php`
 - Swagger UI: `http://localhost:8080/docs/`
 

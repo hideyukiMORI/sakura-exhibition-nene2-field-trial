@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: none
-- Current branch: `main`
+- Current GitHub Issue: `#20`
+- Current branch: `feat/20-exhibition-works-api`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
@@ -20,10 +20,11 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 - [x] Add local MCP-facing read-only evidence for the endpoint. `#12`
 - [x] Write the first field-trial report with command output, request id, and follow-up notes. `#12`
 - [x] Add year-parameter artist list endpoint. `#16`
+- [x] Add a first public work list endpoint for one exhibition year. `#20`
 
 ## Next Candidates
 
-- [ ] Add a first public work list endpoint for one exhibition year.
+- [ ] Add local MCP-facing read-only evidence for the work list endpoint.
 
 ## Operating Notes
 
