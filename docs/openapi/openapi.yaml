@@ -116,6 +116,47 @@ paths:
           $ref: '#/components/responses/PayloadTooLarge'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /exhibitions/{year}/artists:
+    get:
+      tags:
+        - Exhibitions
+      summary: Exhibition artist list by year
+      description: Returns the fixed sandbox artist list for a SAKURA Exhibition-style field-trial year.
+      operationId: getExhibitionArtistsByYear
+      parameters:
+        - name: year
+          in: path
+          required: true
+          description: Exhibition year to read from the sandbox fixture.
+          schema:
+            type: integer
+            format: int32
+            minimum: 2009
+            maximum: 2026
+          example: 2025
+      responses:
+        '200':
+          description: Exhibition artist list response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExhibitionArtistsResponse'
+              examples:
+                ok:
+                  summary: 2025 artist list
+                  value:
+                    exhibitionYear: 2025
+                    artists:
+                      - artistId: 1
+                        displayName:
+                          en: Yoshimi Ohtani
+                          jp: オオタニヨシミ
+                        countryOrRegion: Japan
+                        workCount: 2
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /exhibitions/2026/artists:
     get:
       tags:

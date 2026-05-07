@@ -72,6 +72,15 @@ final readonly class RuntimeApplicationFactory
                 ]),
             )
             ->get(
+                '/exhibitions/{year}/artists',
+                static function (ServerRequestInterface $request) use ($jsonResponses, $artistCatalog) {
+                    $parameters = $request->getAttribute(Router::PARAMETERS_ATTRIBUTE, []);
+                    $year = is_array($parameters) ? (int) ($parameters['year'] ?? 0) : 0;
+
+                    return $jsonResponses->create($artistCatalog->artistsForYear($year));
+                },
+            )
+            ->get(
                 '/exhibitions/2026/artists',
                 static fn (ServerRequestInterface $request) => $jsonResponses->create($artistCatalog->artistsForYear(2026)),
             );

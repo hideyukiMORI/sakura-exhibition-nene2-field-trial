@@ -25,6 +25,7 @@ The first trial should use fixed sandbox data. Public websites can be used as re
 
 ```text
 GET /exhibitions/2026/artists
+GET /exhibitions/{year}/artists
 ```
 
 Suggested first response fields:
