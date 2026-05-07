@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: `#24`
-- Current branch: `feat/24-field-trial-demo-ui`
+- Current GitHub Issue: none
+- Current branch: `main`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
