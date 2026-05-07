@@ -1,0 +1,18 @@
+composer.phar
+/vendor/
+.env
+.env.*
+!.env.example
+.phpunit.cache/
+.phpstan.cache/
+.php-cs-fixer.cache
+coverage/
+clover.xml
+/frontend/node_modules/
+/frontend/dist/
+/public_html/assets/*
+!/public_html/assets/.gitkeep
+
+# Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+# composer.lock
