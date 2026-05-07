@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: none
-- Current branch: `main`
+- Current GitHub Issue: `#24`
+- Current branch: `feat/24-field-trial-demo-ui`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
@@ -21,6 +21,7 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 - [x] Write the first field-trial report with command output, request id, and follow-up notes. `#12`
 - [x] Add year-parameter artist list endpoint. `#16`
 - [x] Add a first public work list endpoint for one exhibition year. `#20`
+- [x] Add a browser demo for artists and works. `#24`
 
 ## Next Candidates
 
