@@ -246,6 +246,48 @@ paths:
           $ref: '#/components/responses/PayloadTooLarge'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /exhibitions/2026/works:
+    get:
+      tags:
+        - Exhibitions
+      summary: 2026 exhibition work list
+      description: Returns the fixed sandbox work list for the 2026 SAKURA Exhibition-style field trial.
+      operationId: getExhibition2026Works
+      responses:
+        '200':
+          description: Exhibition work list response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExhibitionWorksResponse'
+              examples:
+                ok:
+                  summary: 2026 work list
+                  value:
+                    exhibitionYear: 2026
+                    works:
+                      - workId: 20260101
+                        artistId: 1
+                        artistDisplayName:
+                          en: Yoshimi Ohtani
+                          jp: オオタニヨシミ
+                        title:
+                          en: Spring Light
+                          jp: 春の光
+                        workNumber: 1
+                      - workId: 20260201
+                        artistId: 2
+                        artistDisplayName:
+                          en: Hideyuki Mori
+                          jp: 彩
+                        title:
+                          en: Color Field
+                          jp: 彩の場
+                        workNumber: 1
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     ApiKeyAuth:

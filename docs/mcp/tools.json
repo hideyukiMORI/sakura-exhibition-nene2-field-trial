@@ -55,6 +55,24 @@
         "properties": {}
       },
       "responseSchemaRef": "#/components/schemas/ExhibitionArtistsResponse"
+    },
+    {
+      "name": "getExhibition2026Works",
+      "title": "2026 Exhibition Works",
+      "description": "Read the 2026 SAKURA Exhibition-style sandbox work list through the documented public API.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getExhibition2026Works",
+        "method": "GET",
+        "path": "/exhibitions/2026/works"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      },
+      "responseSchemaRef": "#/components/schemas/ExhibitionWorksResponse"
     }
   ]
 }
