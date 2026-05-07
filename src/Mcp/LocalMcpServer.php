@@ -119,10 +119,6 @@ final readonly class LocalMcpServer
             throw new LocalMcpException('tools/call params.arguments must be an object when provided.');
         }
 
-        if ($arguments !== []) {
-            throw new LocalMcpException('The first NENE2 local MCP tools do not accept arguments.');
-        }
-
         $tool = $this->catalog->find($name);
 
         if ($tool === null) {
@@ -137,16 +133,111 @@ final readonly class LocalMcpServer
             throw new LocalMcpException(sprintf('MCP tool "%s" does not map to a local GET API operation.', $name));
         }
 
-        return $this->httpToolResult($tool);
+        $expandedPath = $this->expandToolPath($tool, $arguments);
+
+        return $this->httpToolResult($expandedPath, $tool);
+    }
+
+    /**
+     * @param array<string, mixed> $tool
+     * @param array<string, mixed> $arguments
+     */
+    private function expandToolPath(array $tool, array $arguments): string
+    {
+        $path = $tool['source']['path'];
+        $names = $this->pathParameterNames($path);
+
+        if ($names === []) {
+            if ($arguments !== []) {
+                throw new LocalMcpException(sprintf('MCP tool "%s" does not accept arguments.', $tool['name']));
+            }
+
+            return $path;
+        }
+
+        foreach ($names as $name) {
+            if (!array_key_exists($name, $arguments)) {
+                throw new LocalMcpException(
+                    sprintf(
+                        'MCP tool "%s" requires integer path parameters: %s.',
+                        $tool['name'],
+                        implode(', ', $names),
+                    ),
+                );
+            }
+
+            if (!is_int($arguments[$name])) {
+                throw new LocalMcpException(
+                    sprintf(
+                        'MCP tool "%s" path parameter "%s" must be an integer.',
+                        $tool['name'],
+                        $name,
+                    ),
+                );
+            }
+        }
+
+        $extra = array_diff(array_keys($arguments), $names);
+
+        if ($extra !== []) {
+            throw new LocalMcpException(
+                sprintf(
+                    'MCP tool "%s" received unexpected arguments: %s.',
+                    $tool['name'],
+                    implode(', ', $extra),
+                ),
+            );
+        }
+
+        return $this->substitutePathPlaceholders($path, $arguments);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function pathParameterNames(string $path): array
+    {
+        if (preg_match_all('/\{([a-zA-Z0-9_]+)\}/', $path, $matches) === false) {
+            throw new LocalMcpException(sprintf('MCP catalog path "%s" could not be parsed for parameters.', $path));
+        }
+
+        /** @var list<non-empty-string> $names */
+        $names = $matches[1];
+
+        if ($names === []) {
+            return [];
+        }
+
+        return $names;
+    }
+
+    /**
+     * @param array<string, mixed> $arguments
+     */
+    private function substitutePathPlaceholders(string $path, array $arguments): string
+    {
+        return (string) preg_replace_callback(
+            '/\{([a-zA-Z0-9_]+)\}/',
+            static function (array $match) use ($arguments, $path): string {
+                $key = $match[1];
+
+                if (!array_key_exists($key, $arguments) || !is_int($arguments[$key])) {
+                    throw new LocalMcpException(sprintf('MCP path "%s" is missing a value for "{%s}".', $path, $key));
+                }
+
+                return (string) $arguments[$key];
+            },
+            $path,
+        );
     }
 
     /**
      * @param McpTool $tool
      * @return array<string, mixed>
      */
-    private function httpToolResult(array $tool): array
+    private function httpToolResult(string $requestPath, array $tool): array
     {
-        $response = $this->httpClient->get($this->apiBaseUrl, $tool['source']['path']);
+        $response = $this->httpClient->get($this->apiBaseUrl, $requestPath);
         $body = $this->decodeBody($response->body);
 
         $structuredContent = [

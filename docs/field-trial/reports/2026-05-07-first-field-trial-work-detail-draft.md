@@ -15,7 +15,7 @@ Older MCP-focused artefacts for list endpoints live alongside this directory (`2
 ## MCP and API boundary
 
 | Item | Notes |
-| MCP tool name(s) called | Local catalog still exposes **`getFrameworkSmoke`**, **`getHealth`**, **`getExhibition2026Artists`**, **`getExhibition2026Works`** (`docs/mcp/tools.json`). There is **no** generated MCP wrapper yet for the new **parameterized detail** route; parity is a deliberate follow-up. Prior reports document **`getExhibition2026Works`** / **`getExhibition2026Artists`** smoke. Separately, **GitHub MCP** (Cursor-hosted) was used to open/merge pull requests once the PAT had **`repo`**-class access. |
+| MCP tool name(s) called | Local catalog exposes **`getFrameworkSmoke`**, **`getHealth`**, **`getExhibition2026Artists`**, **`getExhibition2026Works`**, and **`getExhibitionWorkByYearAndId`** (detail; requires JSON-RPC `arguments`: integer **`year`** and **`workId`**) (`docs/mcp/tools.json`). Prior reports document **`getExhibition2026Works`** / **`getExhibition2026Artists`** smoke. Separately, **GitHub MCP** (Cursor-hosted) was used to open/merge pull requests once the PAT had **`repo`**-class access. |
 | `X-Request-Id` or equivalent from the API (if present) | Example captured by driving the shipped runtime in Docker (same stack as PHPUnit): **`f4b8d2a3298ad7762a9a84ff4656e97f`** for `GET /exhibitions/2026/works/20260101`. Re-run captures a new id. |
 | Command, UI action, or high-level client step you record | LLM/agent implemented catalog lookup (`ExhibitionWorkCatalog::workForYearAndId`), `RuntimeApplicationFactory` route wiring, OpenAPI additions, PHPUnit (`HttpRuntimeTest`, generated `RuntimeContractTest` row). Human reviewed PR **`#41`**, squash-merged after CI. |
 
@@ -24,11 +24,18 @@ Older MCP-focused artefacts for list endpoints live alongside this directory (`2
 ```text
 docker compose run --rm app composer check
 
-# Optional narrow slice while iterating (from docs/development/endpoint-scaffold.md):
+docker compose run --rm app vendor/bin/phpunit tests/Mcp/LocalMcpServerTest.php tests/Mcp/LocalMcpToolCatalogTest.php
 
-docker compose run --rm app vendor/bin/phpunit tests/HttpRuntimeTest.php tests/OpenApi/RuntimeContractTest.php
+# JSON-RPC to local stdio MCP (example paths; disposable API container name may vary):
 
-# Example: capture runtime status + request id without starting long-lived HTTP daemon:
+docker rm -f sakura-field-trial-api >/dev/null 2>&1 || true
+docker compose run --rm -d --name sakura-field-trial-api app
+printf '%s\n' \
+  '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' \
+  '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+  '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"getExhibitionWorkByYearAndId","arguments":{"year":2026,"workId":20260101}}}' \
+  | docker compose run --rm -e NENE2_LOCAL_API_BASE_URL=http://sakura-field-trial-api app php tools/local-mcp-server.php
+docker rm -f sakura-field-trial-api >/dev/null 2>&1 || true
 
 docker compose run --rm app php -r 'require "vendor/autoload.php";
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -54,12 +61,11 @@ What the LLM inferred easily:
 What docs or boundaries were unclear:
 
 - Cursor **GitHub MCP** initially returned `403` until the PAT scopes / resource access matched private-repo PR operations (**not solved by `gh auth` alone**).
-- When to add MCP catalog entries vs. shipping HTTP/OpenAPI/tests first (trial kept HTTP contract as source of truth; MCP list tools lag parameterized operations).
 
 ## Follow-up Issues
 
 - GitHub **`#38`** — closed via PR **`#41`** (sandbox work detail endpoint + contract tests).
-- **Suggested next sandbox issue (not filed automatically):** add a **read-only MCP tool** mapped to **`getExhibitionWorkByYearAndId`** (path parameters `{year}`, `{workId}`) mirroring **`docs/mcp/tools.json`** + `composer mcp`.
+- GitHub **`#44`** — MCP catalog + **`LocalMcpServer`** path-parameter handling for **`getExhibitionWorkByYearAndId`**.
 
 ## Reminder (do not fill)
 
