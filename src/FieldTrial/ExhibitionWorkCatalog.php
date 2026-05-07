@@ -94,4 +94,29 @@ final readonly class ExhibitionWorkCatalog
             'works' => $works,
         ];
     }
+
+    /**
+     * @return array{exhibitionYear: int, work: array{workId: int, artistId: int, artistDisplayName: array{en: string, jp: string}, title: array{en: string, jp: string}, workNumber: int}}|null
+     */
+    public function workForYearAndId(int $year, int $workId): ?array
+    {
+        foreach (self::WORKS as $work) {
+            if ($work['exhibitionYear'] !== $year || $work['workId'] !== $workId) {
+                continue;
+            }
+
+            return [
+                'exhibitionYear' => $year,
+                'work' => [
+                    'workId' => $work['workId'],
+                    'artistId' => $work['artistId'],
+                    'artistDisplayName' => $work['artistDisplayName'],
+                    'title' => $work['title'],
+                    'workNumber' => $work['workNumber'],
+                ],
+            ];
+        }
+
+        return null;
+    }
 }

@@ -197,6 +197,62 @@ final class HttpRuntimeTest extends TestCase
         ], $payload['works']);
     }
 
+    public function testExhibitionWorkDetailReturnsPayloadWhenWorkMatchesYear(): void
+    {
+        $factory = new Psr17Factory();
+        $application = (new RuntimeApplicationFactory($factory, $factory))->create();
+
+        $response = $application->handle($factory->createServerRequest('GET', 'https://example.test/exhibitions/2026/works/20260101'));
+        $payload = $this->decodeJson($response);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(2026, $payload['exhibitionYear']);
+        self::assertSame([
+            'workId' => 20260101,
+            'artistId' => 1,
+            'artistDisplayName' => [
+                'en' => 'Yoshimi Ohtani',
+                'jp' => 'オオタニヨシミ',
+            ],
+            'title' => [
+                'en' => 'Spring Light',
+                'jp' => '春の光',
+            ],
+            'workNumber' => 1,
+        ], $payload['work']);
+    }
+
+    public function testExhibitionWorkDetailReturnsProblemDetailsWhenUnknownWorkId(): void
+    {
+        $factory = new Psr17Factory();
+        $application = (new RuntimeApplicationFactory($factory, $factory))->create();
+
+        $response = $application->handle($factory->createServerRequest('GET', 'https://example.test/exhibitions/2026/works/20999901'));
+        $payload = $this->decodeJson($response);
+
+        self::assertSame(404, $response->getStatusCode());
+        self::assertSame('application/problem+json; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        self::assertMatchesRegularExpression('/\A[a-f0-9]{32}\z/', $response->getHeaderLine('X-Request-Id'));
+        self::assertSame('https://nene2.dev/problems/not-found', $payload['type']);
+        self::assertSame(
+            'The requested work was not found for this exhibition year.',
+            $payload['detail'] ?? null,
+        );
+    }
+
+    public function testExhibitionWorkDetailReturnsProblemDetailsWhenWorkExistsForDifferentYear(): void
+    {
+        $factory = new Psr17Factory();
+        $application = (new RuntimeApplicationFactory($factory, $factory))->create();
+
+        $response = $application->handle($factory->createServerRequest('GET', 'https://example.test/exhibitions/2026/works/20250101'));
+        $payload = $this->decodeJson($response);
+
+        self::assertSame(404, $response->getStatusCode());
+        self::assertSame('application/problem+json; charset=utf-8', $response->getHeaderLine('Content-Type'));
+        self::assertSame('https://nene2.dev/problems/not-found', $payload['type']);
+    }
+
     public function testUnsupportedMethodReturnsProblemDetailsWithAllowHeader(): void
     {
         $factory = new Psr17Factory();

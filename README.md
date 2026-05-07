@@ -63,6 +63,7 @@ Useful local URLs:
 - Field-trial artist list: `http://localhost:8080/exhibitions/2026/artists`
 - Field-trial artist list by year: `http://localhost:8080/exhibitions/2025/artists`
 - Field-trial work list by year: `http://localhost:8080/exhibitions/2026/works`
+- Field-trial work detail by year and id: `http://localhost:8080/exhibitions/2026/works/20260101`
 - OpenAPI: `http://localhost:8080/openapi.php`
 - Swagger UI: `http://localhost:8080/docs/`
 
