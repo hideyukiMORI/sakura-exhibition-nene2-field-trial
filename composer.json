@@ -1,8 +1,13 @@
 {
   "name": "hideyukimori/sakura-exhibition-nene2-field-trial",
-  "description": "Private NENE2 field-trial sandbox for a SAKURA Exhibition-style public contest API.",
+  "description": "Public NENE2 field-trial sandbox: SAKURA Exhibition–style demo API, OpenAPI, tests, and local MCP (not affiliated with any real event).",
   "type": "project",
   "license": "MIT",
+  "homepage": "https://github.com/hideyukiMORI/sakura-exhibition-nene2-field-trial",
+  "support": {
+    "issues": "https://github.com/hideyukiMORI/sakura-exhibition-nene2-field-trial/issues",
+    "source": "https://github.com/hideyukiMORI/sakura-exhibition-nene2-field-trial"
+  },
   "require": {
     "php": ">=8.4.1 <9.0",
     "nyholm/psr7": "^1.8",

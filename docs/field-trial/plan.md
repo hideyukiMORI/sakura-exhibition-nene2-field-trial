@@ -1,6 +1,6 @@
 # Field Trial Plan
 
-This private repository proves whether NENE2 can be adapted into a small client-style API project with useful LLM/MCP evidence.
+This **public** field-trial repository proves whether NENE2 can be adapted into a small client-style API project with useful LLM/MCP evidence. It is **not** affiliated with any real exhibition; see the root `README.md` public notice.
 
 ## Domain
 

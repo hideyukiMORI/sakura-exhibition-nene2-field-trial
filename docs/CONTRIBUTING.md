@@ -1,5 +1,7 @@
 # Contributing
 
+This repository is an **open** NENE2 field-trial sandbox. Read the root **`README.md` public notice** (no real-event affiliation, fictional data) and **`SECURITY.md`** before treating any copy or fixture as real-world fact.
+
 NENE2 is built through small, Issue-driven changes. This document is the shared entry point for humans and AI agents.
 
 ## Required Reading

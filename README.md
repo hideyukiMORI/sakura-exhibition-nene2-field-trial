@@ -1,29 +1,36 @@
 # SAKURA Exhibition NENE2 Field Trial
 
-Private field-trial sandbox for proving NENE2 `v0.1.1` in a SAKURA Exhibition-style public contest domain.
+**Public** field-trial sandbox that demonstrates adapting [NENE2](https://github.com/hideyukiMORI/NENE2) `v0.1.1` into a small **SAKURA Exhibition–style** public-contest API shape: fixed fixture data, documented JSON APIs, OpenAPI, tests, and local MCP tools.
 
-This repository starts from NENE2 and keeps the first trial deliberately small: use public contest-page concepts, fixed sandbox data, documented JSON APIs, OpenAPI, tests, and local MCP tool calls.
+## Public notice (read before use)
+
+- **Not affiliated** with any real exhibition, contest organiser, or trademark holder. **“SAKURA Exhibition–style”** means *inspired-by public listing/detail concepts* for learning and API design only.
+- **Fictional / sandbox data** only. Names, years, and work ids are **not** real participant or production records.
+- **No endorsement** implied. Third-party names and references in docs or fixtures are for domain illustration unless explicitly stated otherwise.
+- **Purpose:** evidence that NENE2’s workflow (scaffold, OpenAPI, tests, MCP boundary) works **outside** the framework repository. This is **not** a production product offering.
+
+For security expectations and how to report issues, see [`SECURITY.md`](SECURITY.md).
 
 ## Purpose
 
 The goal is to create evidence that NENE2 works beyond its framework repository:
 
 - adapt NENE2 into a small client-style API project
-- add a read-only contest endpoint through the documented scaffold workflow
-- expose the endpoint through OpenAPI
-- optionally map safe read-only behavior into MCP metadata
+- add read-only contest-style endpoints through the documented scaffold workflow
+- expose behaviour through OpenAPI
+- map safe read-only operations into MCP metadata where useful
 - record an LLM/MCP tool call and request id in a field-trial report
 
 ## Safety Boundaries
 
 This sandbox must not touch production systems.
 
-- Do not connect to the live SAKURA Exhibition database.
-- Do not use admin pages, member-only pages, or private participant data.
+- Do not connect to any live exhibition or contest production database.
+- Do not use admin pages, member-only pages, or real participant private data.
 - Do not commit API keys, passwords, local `.env` files, screenshots with secrets, or production URLs.
 - Use public-page concepts and small fixed fixtures only.
 
-Reference public pages can inform the domain shape, but the sandbox should stay self-contained and reviewable.
+Reference public pages may inform naming and shape, but this repository stays **self-contained and reviewable**.
 
 ## First Trial Target
 
@@ -33,9 +40,9 @@ Start with one read-only endpoint:
 GET /exhibitions/2026/artists
 ```
 
-Expected first behavior:
+Expected first behaviour:
 
-- return a small list of public artist display names from fixed fixture data
+- return a small list of display names from **fixed fixture data**
 - document the response in `docs/openapi/openapi.yaml`
 - add runtime and OpenAPI contract coverage
 - record a field-trial report after a local MCP call
@@ -80,11 +87,11 @@ If that port is already in use, run `npm run dev --prefix frontend -- --port 517
 
 Initial base:
 
-- Source project: `hideyukiMORI/NENE2`
+- Source project: [`hideyukiMORI/NENE2`](https://github.com/hideyukiMORI/NENE2)
 - Base tag: `v0.1.1`
 - Base commit: `8f64707dc6c60fe99cef6cfe5f6dae7dac57e7a5`
 
-Keep framework-level improvements in the NENE2 repository. Keep SAKURA Exhibition-style domain work in this sandbox.
+Keep framework-level improvements in the NENE2 repository. Keep exhibition-style **demo** domain work in this sandbox.
 
 ## Project Docs
 
@@ -105,6 +112,14 @@ Use GitHub Issues for work:
 4. Run the narrowest useful checks, then `composer check`.
 5. Push, open a PR, merge after checks, and return local `main` to a clean state.
 
+## Before flipping the repo to Public on GitHub
+
+Suggested maintainer checklist:
+
+- Confirm **no** committed `.env` or real keys (`git log --all -S 'NENE2_MACHINE_API_KEY=' -- '*.env*'` and similar if ever in doubt).
+- Enable **Private vulnerability reporting** (Settings → Security) if you want `SECURITY.md` path 1 to apply.
+- Review **branch protection** and **Dependabot** alerts periodically.
+
 ## License
 
-This sandbox inherits the MIT-licensed NENE2 foundation. Public page references remain owned by their respective rights holders.
+This sandbox inherits the MIT-licensed NENE2 foundation. Third-party marks, public page references, and any real-world names used only for illustration remain owned by their respective rights holders; **no association with this demo is implied**.
