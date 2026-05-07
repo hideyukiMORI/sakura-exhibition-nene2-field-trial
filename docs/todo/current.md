@@ -5,7 +5,7 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: none
+- Current GitHub Issue: `#38`
 - Current branch: `main`
 - Base: NENE2 `v0.1.1`
 
@@ -28,7 +28,7 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 
 ## Next Candidates
 
-- [ ] None queued (see `docs/field-trial/plan.md`).
+- [ ] Add work detail endpoint `GET /exhibitions/{year}/works/{workId}`. `#38`
 
 ## Operating Notes
 

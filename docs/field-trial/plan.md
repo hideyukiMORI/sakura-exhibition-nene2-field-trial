@@ -49,6 +49,10 @@ Suggested first work response fields:
 
 Keep the data small, static, and non-sensitive until the endpoint shape is proven.
 
+## Next Endpoint Candidates
+
+- `GET /exhibitions/{year}/works/{workId}` — public work **detail** for a single fixture work (see Issue `#38`).
+
 ## Report Template
 
 Create reports under `docs/field-trial/reports/` with:
