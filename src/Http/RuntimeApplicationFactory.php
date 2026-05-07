@@ -6,6 +6,7 @@ namespace Nene2\Http;
 
 use Nene2\Error\ErrorHandlerMiddleware;
 use Nene2\Error\ProblemDetailsResponseFactory;
+use Nene2\FieldTrial\ExhibitionArtistCatalog;
 use Nene2\FrameworkInfo;
 use Nene2\Middleware\ApiKeyAuthenticationMiddleware;
 use Nene2\Middleware\CorsMiddleware;
@@ -37,6 +38,7 @@ final readonly class RuntimeApplicationFactory
         $jsonResponses = new JsonResponseFactory($this->responseFactory, $this->streamFactory);
         $problemDetails = new ProblemDetailsResponseFactory($this->responseFactory, $this->streamFactory);
         $framework = new FrameworkInfo();
+        $artistCatalog = new ExhibitionArtistCatalog();
 
         $router = (new Router())
             ->get(
@@ -68,6 +70,10 @@ final readonly class RuntimeApplicationFactory
                     'message' => 'pong',
                     'status' => 'ok',
                 ]),
+            )
+            ->get(
+                '/exhibitions/2026/artists',
+                static fn (ServerRequestInterface $request) => $jsonResponses->create($artistCatalog->artistsForYear(2026)),
             );
 
         return new MiddlewareDispatcher(

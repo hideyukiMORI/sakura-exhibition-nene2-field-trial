@@ -29,10 +29,11 @@ GET /exhibitions/2026/artists
 
 Suggested first response fields:
 
-- `id`
-- `displayName`
+- `artistId`
+- `displayName.en`
+- `displayName.jp`
 - `countryOrRegion`
-- `category`
+- `workCount`
 
 Keep the data small, static, and non-sensitive until the endpoint shape is proven.
 

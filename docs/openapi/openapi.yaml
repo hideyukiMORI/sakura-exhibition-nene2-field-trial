@@ -10,6 +10,8 @@ servers:
 tags:
   - name: System
     description: Framework and runtime smoke endpoints.
+  - name: Exhibitions
+    description: Public SAKURA Exhibition-style field-trial endpoints.
 paths:
   /:
     get:
@@ -110,6 +112,42 @@ paths:
                   value:
                     message: pong
                     status: ok
+        '413':
+          $ref: '#/components/responses/PayloadTooLarge'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /exhibitions/2026/artists:
+    get:
+      tags:
+        - Exhibitions
+      summary: 2026 exhibition artist list
+      description: Returns the fixed sandbox artist list for the 2026 SAKURA Exhibition-style field trial.
+      operationId: getExhibition2026Artists
+      responses:
+        '200':
+          description: Exhibition artist list response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExhibitionArtistsResponse'
+              examples:
+                ok:
+                  summary: 2026 artist list
+                  value:
+                    exhibitionYear: 2026
+                    artists:
+                      - artistId: 1
+                        displayName:
+                          en: Yoshimi Ohtani
+                          jp: オオタニヨシミ
+                        countryOrRegion: Japan
+                        workCount: 1
+                      - artistId: 2
+                        displayName:
+                          en: Hideyuki Mori
+                          jp: 彩
+                        countryOrRegion: Japan
+                        workCount: 1
         '413':
           $ref: '#/components/responses/PayloadTooLarge'
         '500':
@@ -363,3 +401,53 @@ components:
           enum:
             - ok
           example: ok
+    ExhibitionArtistsResponse:
+      type: object
+      required:
+        - exhibitionYear
+        - artists
+      properties:
+        exhibitionYear:
+          type: integer
+          format: int32
+          example: 2026
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExhibitionArtist'
+    ExhibitionArtist:
+      type: object
+      required:
+        - artistId
+        - displayName
+        - countryOrRegion
+        - workCount
+      properties:
+        artistId:
+          type: integer
+          format: int32
+          example: 1
+        displayName:
+          $ref: '#/components/schemas/ArtistDisplayName'
+        countryOrRegion:
+          type: string
+          example: Japan
+        workCount:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 1
+      additionalProperties: false
+    ArtistDisplayName:
+      type: object
+      required:
+        - en
+        - jp
+      properties:
+        en:
+          type: string
+          example: Yoshimi Ohtani
+        jp:
+          type: string
+          example: オオタニヨシミ
+      additionalProperties: false

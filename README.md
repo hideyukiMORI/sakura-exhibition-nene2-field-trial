@@ -60,6 +60,7 @@ Useful local URLs:
 
 - API health: `http://localhost:8080/health`
 - Example endpoint from NENE2: `http://localhost:8080/examples/ping`
+- Field-trial artist list: `http://localhost:8080/exhibitions/2026/artists`
 - OpenAPI: `http://localhost:8080/openapi.php`
 - Swagger UI: `http://localhost:8080/docs/`
 

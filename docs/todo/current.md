@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: `#1`
-- Current branch: `main`
+- Current GitHub Issue: `#8`
+- Current branch: `feat/8-exhibition-artists-api`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
@@ -17,9 +17,9 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 
 ## Next Candidates
 
-- [ ] Add fixed fixture data for a public exhibition artist list.
-- [ ] Implement `GET /exhibitions/2026/artists`.
-- [ ] Add OpenAPI contract coverage for the exhibition endpoint.
+- [x] Add fixed fixture data for a public exhibition artist list. `#8`
+- [x] Implement `GET /exhibitions/2026/artists`. `#8`
+- [x] Add OpenAPI contract coverage for the exhibition endpoint. `#8`
 - [ ] Add local MCP-facing read-only evidence for the endpoint.
 - [ ] Write the first field-trial report with command output, request id, and follow-up notes.
 
