@@ -73,6 +73,34 @@
         "properties": {}
       },
       "responseSchemaRef": "#/components/schemas/ExhibitionWorksResponse"
+    },
+    {
+      "name": "getExhibitionWorkByYearAndId",
+      "title": "Exhibition Work Detail",
+      "description": "Read a single sandbox exhibition work by year and work id through the documented public API.",
+      "safety": "read",
+      "source": {
+        "type": "openapi",
+        "operationId": "getExhibitionWorkByYearAndId",
+        "method": "GET",
+        "path": "/exhibitions/{year}/works/{workId}"
+      },
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["year", "workId"],
+        "properties": {
+          "year": {
+            "type": "integer",
+            "description": "Exhibition year matching the path parameter."
+          },
+          "workId": {
+            "type": "integer",
+            "description": "Sandbox work identifier matching the path parameter."
+          }
+        }
+      },
+      "responseSchemaRef": "#/components/schemas/ExhibitionWorkDetailResponse"
     }
   ]
 }

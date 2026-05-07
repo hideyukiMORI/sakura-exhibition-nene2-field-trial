@@ -23,6 +23,7 @@ final class LocalMcpServerTest extends TestCase
             'params' => [],
         ]);
 
+        self::assertIsArray($response);
         self::assertSame('2.0', $response['jsonrpc'] ?? null);
         self::assertSame(1, $response['id'] ?? null);
         self::assertSame('nene2-local-mcp', $response['result']['serverInfo']['name'] ?? null);
@@ -39,6 +40,7 @@ final class LocalMcpServerTest extends TestCase
             'method' => 'tools/list',
         ]);
 
+        self::assertIsArray($response);
         self::assertSame('getHealth', $response['result']['tools'][1]['name'] ?? null);
         self::assertSame(true, $response['result']['tools'][1]['annotations']['readOnlyHint'] ?? null);
         self::assertInstanceOf(\stdClass::class, $response['result']['tools'][1]['inputSchema']['properties'] ?? null);
@@ -46,6 +48,16 @@ final class LocalMcpServerTest extends TestCase
         self::assertSame(true, $response['result']['tools'][2]['annotations']['readOnlyHint'] ?? null);
         self::assertSame('getExhibition2026Works', $response['result']['tools'][3]['name'] ?? null);
         self::assertSame(true, $response['result']['tools'][3]['annotations']['readOnlyHint'] ?? null);
+
+        self::assertSame(
+            'getExhibitionWorkByYearAndId',
+            $response['result']['tools'][4]['name'] ?? null,
+        );
+        self::assertSame(true, $response['result']['tools'][4]['annotations']['readOnlyHint'] ?? null);
+
+        self::assertIsArray($response['result']['tools'][4]['inputSchema']['properties']);
+        self::assertArrayHasKey('year', $response['result']['tools'][4]['inputSchema']['properties']);
+        self::assertArrayHasKey('workId', $response['result']['tools'][4]['inputSchema']['properties']);
     }
 
     public function testToolsCallInvokesLocalHttpApiAndReturnsRequestId(): void
@@ -67,6 +79,7 @@ final class LocalMcpServerTest extends TestCase
             ],
         ]);
 
+        self::assertIsArray($response);
         self::assertSame('http://localhost:8080', $client->baseUrl);
         self::assertSame('/health', $client->path);
         self::assertSame(false, $response['result']['isError'] ?? null);
@@ -93,6 +106,7 @@ final class LocalMcpServerTest extends TestCase
             ],
         ]);
 
+        self::assertIsArray($response);
         self::assertSame('/exhibitions/2026/artists', $client->path);
         self::assertSame(false, $response['result']['isError'] ?? null);
         self::assertSame('request-artists-123', $response['result']['structuredContent']['requestId'] ?? null);
@@ -119,6 +133,7 @@ final class LocalMcpServerTest extends TestCase
             ],
         ]);
 
+        self::assertIsArray($response);
         self::assertSame('/exhibitions/2026/works', $client->path);
         self::assertSame(false, $response['result']['isError'] ?? null);
         self::assertSame('request-works-123', $response['result']['structuredContent']['requestId'] ?? null);
@@ -127,6 +142,80 @@ final class LocalMcpServerTest extends TestCase
             'Spring Light',
             $response['result']['structuredContent']['body']['works'][0]['title']['en'] ?? null,
         );
+    }
+
+    public function testToolsCallInvokesExhibitionWorkDetailEndpoint(): void
+    {
+        $client = new RecordingLocalMcpHttpClient(new LocalMcpHttpResponse(
+            200,
+            ['x-request-id' => 'request-detail-123'],
+            '{"exhibitionYear":2026,"work":{"workId":20260101,"artistId":1,"artistDisplayName":{"en":"Yoshimi Ohtani","jp":"オオタニヨシミ"},"title":{"en":"Spring Light","jp":"春の光"},"workNumber":1}}',
+        ));
+        $server = $this->server($client);
+
+        $response = $server->handle([
+            'jsonrpc' => '2.0',
+            'id' => 6,
+            'method' => 'tools/call',
+            'params' => [
+                'name' => 'getExhibitionWorkByYearAndId',
+                'arguments' => [
+                    'year' => 2026,
+                    'workId' => 20260101,
+                ],
+            ],
+        ]);
+
+        self::assertIsArray($response);
+        self::assertSame('/exhibitions/2026/works/20260101', $client->path);
+        self::assertSame(false, $response['result']['isError'] ?? null);
+        self::assertSame('request-detail-123', $response['result']['structuredContent']['requestId'] ?? null);
+        self::assertSame(
+            'Spring Light',
+            $response['result']['structuredContent']['body']['work']['title']['en'] ?? null,
+        );
+    }
+
+    public function testToolsCallRejectsUnexpectedArgumentsForNoParameterTools(): void
+    {
+        $server = $this->server();
+
+        $response = $server->handle([
+            'jsonrpc' => '2.0',
+            'id' => 10,
+            'method' => 'tools/call',
+            'params' => [
+                'name' => 'getHealth',
+                'arguments' => [
+                    'year' => 2026,
+                ],
+            ],
+        ]);
+
+        self::assertIsArray($response);
+        self::assertArrayHasKey('error', $response);
+        self::assertStringContainsString('does not accept arguments', $response['error']['message'] ?? '');
+    }
+
+    public function testToolsCallRejectsMissingPathParameters(): void
+    {
+        $server = $this->server();
+
+        $response = $server->handle([
+            'jsonrpc' => '2.0',
+            'id' => 11,
+            'method' => 'tools/call',
+            'params' => [
+                'name' => 'getExhibitionWorkByYearAndId',
+                'arguments' => [
+                    'year' => 2026,
+                ],
+            ],
+        ]);
+
+        self::assertIsArray($response);
+        self::assertArrayHasKey('error', $response);
+        self::assertStringContainsString('requires integer path parameters', $response['error']['message'] ?? '');
     }
 
     public function testNotificationsDoNotReturnResponses(): void

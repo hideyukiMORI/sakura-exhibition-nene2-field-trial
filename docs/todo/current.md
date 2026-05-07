@@ -26,11 +26,11 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 - [x] Refine premium portal UI (accent, i18n toggle, footer). `#32`
 - [x] Add local MCP-facing read-only evidence for the work list endpoint. `#34`
 - [x] Add work detail endpoint `GET /exhibitions/{year}/works/{workId}`. `#38`
-- [x] Write NENE2-aligned field-trial draft report for work detail + toolchain. `#42`
+- [x] Add MCP catalog tool for parameterized work detail (`getExhibitionWorkByYearAndId`). `#44`
 
 ## Next Candidates
 
-- [ ] Add MCP catalog tool for parameterized work detail (`getExhibitionWorkByYearAndId`) when we want tooling parity beyond list routes.
+- [ ] Decide whether parameterized MCP tooling should extend to **`getExhibitionArtistsByYear`** / **`getExhibitionWorksByYear`** for symmetry with OpenAPI `/exhibitions/{year}/...` routes.
 
 ## Operating Notes
 
