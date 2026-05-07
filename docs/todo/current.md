@@ -5,8 +5,8 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: none
-- Current branch: `main`
+- Current GitHub Issue: `#28`
+- Current branch: `feat/28-cinematic-luxury-portal-ui`
 - Base: NENE2 `v0.1.1`
 
 ## Completed
@@ -22,6 +22,7 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 - [x] Add year-parameter artist list endpoint. `#16`
 - [x] Add a first public work list endpoint for one exhibition year. `#20`
 - [x] Add a browser demo for artists and works. `#24`
+- [x] Restyle the browser demo as a cinematic luxury portal. `#28`
 
 ## Next Candidates
 

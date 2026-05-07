@@ -72,7 +72,7 @@ Start the browser demo with the local Vite proxy:
 npm run dev --prefix frontend
 ```
 
-The field-trial demo is served at `http://localhost:5173/` and reads the Docker API through `/api`.
+The cinematic field-trial demo is served at `http://localhost:5173/` and reads the Docker API through `/api`.
 If that port is already in use, run `npm run dev --prefix frontend -- --port 5174`.
 
 ## NENE2 Base
