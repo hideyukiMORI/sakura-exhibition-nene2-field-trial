@@ -102,6 +102,38 @@ final class HttpRuntimeTest extends TestCase
         self::assertSame('ok', $payload['status']);
     }
 
+    public function testExhibitionArtistsEndpointReturnsFieldTrialArtists(): void
+    {
+        $factory = new Psr17Factory();
+        $application = (new RuntimeApplicationFactory($factory, $factory))->create();
+
+        $response = $application->handle($factory->createServerRequest('GET', 'https://example.test/exhibitions/2026/artists'));
+        $payload = $this->decodeJson($response);
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame(2026, $payload['exhibitionYear']);
+        self::assertSame([
+            [
+                'artistId' => 1,
+                'displayName' => [
+                    'en' => 'Yoshimi Ohtani',
+                    'jp' => 'オオタニヨシミ',
+                ],
+                'countryOrRegion' => 'Japan',
+                'workCount' => 1,
+            ],
+            [
+                'artistId' => 2,
+                'displayName' => [
+                    'en' => 'Hideyuki Mori',
+                    'jp' => '彩',
+                ],
+                'countryOrRegion' => 'Japan',
+                'workCount' => 1,
+            ],
+        ], $payload['artists']);
+    }
+
     public function testUnsupportedMethodReturnsProblemDetailsWithAllowHeader(): void
     {
         $factory = new Psr17Factory();
