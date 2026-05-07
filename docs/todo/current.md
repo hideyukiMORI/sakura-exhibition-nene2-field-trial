@@ -5,7 +5,7 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 ## Status
 
 - Current milestone: first private SAKURA Exhibition-style field trial
-- Current GitHub Issue: `#38`
+- Current GitHub Issue: none (see **Next Candidates**)
 - Current branch: `main`
 - Base: NENE2 `v0.1.1`
 
@@ -25,10 +25,12 @@ Purpose: keep the field-trial work visible across chats, agents, and local sessi
 - [x] Restyle the browser demo as a cinematic luxury portal. `#28`
 - [x] Refine premium portal UI (accent, i18n toggle, footer). `#32`
 - [x] Add local MCP-facing read-only evidence for the work list endpoint. `#34`
+- [x] Add work detail endpoint `GET /exhibitions/{year}/works/{workId}`. `#38`
+- [x] Write NENE2-aligned field-trial draft report for work detail + toolchain. `#42`
 
 ## Next Candidates
 
-- [ ] Add work detail endpoint `GET /exhibitions/{year}/works/{workId}`. `#38`
+- [ ] Add MCP catalog tool for parameterized work detail (`getExhibitionWorkByYearAndId`) when we want tooling parity beyond list routes.
 
 ## Operating Notes
 
