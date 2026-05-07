@@ -67,6 +67,8 @@ Create reports under `docs/field-trial/reports/` with:
 - observations
 - follow-up candidates for NENE2
 
+Optional cross-check: NENE2 publishes a short generic skeleton at `docs/templates/field-trial-report.md` (**`hideyukiMORI/NENE2`**). Example filled draft for work detail: `docs/field-trial/reports/2026-05-07-first-field-trial-work-detail-draft.md`.
+
 ## Non-Goals
 
 - Production integration
